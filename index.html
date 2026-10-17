@@ -1,1 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Birthday Dispatch</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, sans-serif; }
+    body { background: #0a0b10; color: #f0f0f5; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; transition: background 1.5s; }
+    body.celebrate { background: radial-gradient(circle at top, #2b1055 0%, #11052C 60%, #000 100%); }
+    .card { width: 100%; max-width: 500px; padding: 2rem; border-radius: 20px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); text-align: center; }
+    .badge { display: inline-block; padding: 5px 12px; border-radius: 50px; background: rgba(255,71,126,0.15); color: #ff477e; font-size: 0.75rem; letter-spacing: 1.5px; font-weight: 700; margin-bottom: 1.2rem; }
+    h2 { font-size: 1.45rem; margin-bottom: 0.8rem; }
+    p { color: #a0a3bd; font-size: 0.95rem; margin-bottom: 1.8rem; line-height: 1.6; }
+    .btn-group { display: flex; justify-content: center; gap: 12px; }
+    button { padding: 12px 24px; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; border: none; }
+    .btn-yes { background: #ff477e; color: #fff; }
+    .btn-no { background: rgba(255,255,255,0.1); color: #ccc; }
+    #letter { display: none; text-align: left; opacity: 0; transition: all 0.8s ease; }
+    .letter-content { background: rgba(255,255,255,0.03); padding: 1.2rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); font-size: 0.95rem; line-height: 1.8; color: #e4e6eb; }
+    .letter-content p { margin-bottom: 1rem; color: #e4e6eb; }
+    .letter-content p:last-child { margin-bottom: 0; }
+    .float-item { position: fixed; pointer-events: none; animation: floatUp 7s linear infinite; font-size: 2rem; z-index: 99; }
+    @keyframes floatUp { 0% { transform: translateY(110vh) rotate(0deg); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; } }
+  </style>
+</head>
+<body>
+  <div class="card" id="gate">
+    <div class="badge" id="badge">Security Clearance 1 / 3</div>
+    <h2 id="title">Classified Dispatch Detected</h2>
+    <p id="desc">Do you want to proceed and read this message?</p>
+    <div class="btn-group">
+      <button class="btn-yes" id="yesBtn" onclick="nextStep()">Proceed: Yes</button>
+      <button class="btn-no" id="noBtn" onclick="dodge()">No</button>
+    </div>
+  </div>
+
+  <div class="card" id="letter">
+    <h2 style="text-align:center; color:#ff477e; margin-bottom: 1rem;">Happy 24th Birthday! 🎉</h2>
+    <div class="letter-content">
+      <p>I still remember when you were our full-time, round-the-clock crybaby—and look at you today. 24 years old, handling life head-on, and living it completely on your own terms.</p>
+      <p>It’s been years since we last met in person, but thank goodness for the network, our video calls, and routine voice notes that keep us close. Distance is never constant, but our togetherness will never fall short.</p>
+      <p>You have already made me immensely proud. I want nothing more than US staying like this forever. I’m always in your corner, and I know you've got mine (let’s be real, you couldn't imagine life without me anyway).</p>
+      <p style="text-align: right; color:#ff9ebb; font-weight:bold; margin-top:1.5rem;">— Your Brother ❤️</p>
+    </div>
+  </div>
+
+  <script>
+    let step = 1;
+    const steps = [
+      { badge: "Security Clearance 1 / 3", title: "Classified Dispatch Detected", desc: "Do you want to proceed and read this message?", btn: "Proceed: Yes" },
+      { badge: "Security Clearance 2 / 3", title: "Identity Check Required", desc: "Are you certain? The sender thinks you're dramatic.", btn: "Confirm: Yes" },
+      { badge: "Security Clearance 3 / 3", title: "Final Authorization", desc: "Ready to unlock the 24-year transformation?", btn: "Unlock: Boom!" }
+    ];
+    function nextStep() {
+      if (step < 3) {
+        step++;
+        document.getElementById("badge").innerText = steps[step-1].badge;
+        document.getElementById("title").innerText = steps[step-1].title;
+        document.getElementById("desc").innerText = steps[step-1].desc;
+        document.getElementById("yesBtn").innerText = steps[step-1].btn;
+      } else {
+        document.getElementById("gate").style.display = "none";
+        const l = document.getElementById("letter");
+        l.style.display = "block";
+        setTimeout(() => { l.style.opacity = "1"; }, 50);
+        document.body.classList.add("celebrate");
+        confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+        const items = ['🎈', '🎂', '🎉', '🍰', '✨'];
+        for (let i = 0; i < 20; i++) {
+          setTimeout(() => {
+            const el = document.createElement('div');
+            el.className = 'float-item';
+            el.innerText = items[Math.floor(Math.random() * items.length)];
+            el.style.left = (Math.random() * 90) + 'vw';
+            el.style.animationDuration = (5 + Math.random() * 4) + 's';
+            document.body.appendChild(el);
+          }, i * 300);
+        }
+      }
+    }
+    function dodge() {
+      const b = document.getElementById("noBtn");
+      b.style.transform = `translate(${(Math.random()-0.5)*180}px, ${(Math.random()-0.5)*100}px)`;
+    }
+  </script>
+</body>
+</html>
 
